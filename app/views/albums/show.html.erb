@@ -1,0 +1,32 @@
+<div class="container">
+  <div>
+    <h4><i>About MY Album</i> - <%= @album.description %></h4>
+  </div>
+  <div class = "col-md-12">
+    <% @album_images.each do |image| %>
+        <div class = "col-md-3"style='height:250px;'>
+          <%=link_to (image_tag image.avatar(:medium)),album_image_path(:album_id => image.album.id, :id => image.id)%>
+        </div>
+    <% end %>
+  </div>
+</div>
+<%= will_paginate @album_images %>
+<div>
+  <%= form_for ([@album,@image]),:html => { :multipart => true } do |f| %>
+      <div class="form-group">
+        <%= f.file_field :avatar %>
+      </div>
+      <div>
+        <%= f.submit "SUBMIT", :id => 'save', :class=>"btn btn-primary" %>
+      </div>
+  <% end %>
+</div>
+<script type ='text/javascript'>
+    $('#save').click(function (event) {
+        $('#no_collateral_type_error, #no_multiple_type_error').remove();
+        if ($('#image_avatar').val() == "") {
+            $('#image_avatar').after("<span id=no_multiple_type_error class=loan_error >you have to choose a image file</span>");
+            event.preventDefault();
+        }
+    });
+</script>

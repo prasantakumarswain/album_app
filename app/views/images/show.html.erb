@@ -1,0 +1,38 @@
+<div class="product-show-img">
+  <span>
+  <%= image_tag @image.avatar,  :id => "zoom_01" ,:width=>"200px"%>
+  </span>
+</div>
+<%= @image.like %> - <%=link_to "likes",like_album_images_path(:image_id => @image.id) %>
+<%=@image_comments.count %>
+<b>comments</b>
+<% @image_comments.each do |comment| %>
+    <b><%#= username(comment.user_id)%></b>
+    <div>
+      <b><%=image_tag comment.user.profile_photo(:small) %></b>
+      <b><%=comment.user.username %></b> -
+      <span class="commentdate"><%= comment.created_at.strftime("%b %d at %I:%M %P")%></span>
+    </div>
+    <div id="comment"><%= comment.content %>
+      <% if current_user && current_user.id == comment.user_id.to_i  %>
+          <span><%= link_to 'X', comment, confirm: 'Are you sure?', method: :delete %></span>
+      <% end %>
+    </div>
+<% end %>
+<%= form_tag Comment.new, url: album_image_path, :method => "post" do %>
+    <div class="col-xs-3">
+      <%= text_field_tag :content, params[:content],:class=>"form-control"%>
+    </div>
+    <%= hidden_field_tag("album_id", @image.album.id) %>
+    <%= hidden_field_tag("image_id", @image.id) %>
+    <%#= hidden_field_tag("user_id", current_user.id) %>
+    <%= submit_tag "SUBMIT", :class=>"btn btn-primary" %>
+<% end %>
+<script>
+    $('#zoom_01').elevateZoom({
+        zoomType: "inner",
+        cursor: "crosshair",
+        zoomWindowFadeIn: 500,
+        zoomWindowFadeOut: 750
+    });
+</script>

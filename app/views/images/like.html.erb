@@ -1,0 +1,30 @@
+<p>
+  <% if @like.present? %>
+      <%= @like.like %>
+      <%= @unlike.unlike %>
+  <% end %>
+</p>
+<p>
+  <%= image_tag @image.avatar,:style => 'width:100px; height:auto;' %><br>
+  <%=link_to "like",like_album_images_path(@image) %> |
+  <%=link_to "unlike",'#' %>
+</p>
+
+<% @image_comments.each do |comment| %>
+    <%= username(comment.user_id)%> |
+    <%= comment.content %>
+    <% if current_user && current_user.id == comment.user_id.to_i  %>
+        <%= link_to 'X', comment, :confirm => 'Are you sure?', :method => :delete %><br>
+    <% end %>
+<% end %>
+<%= form_tag Comment.new, url: album_image_path, :method => "post" do %>
+    <div class="col-xs-3">
+      <%= text_field_tag :content, params[:content],:class=>"form-control"%>
+    </div>
+    <%= hidden_field_tag("album_id", @image.album.id) %>
+    <%= hidden_field_tag("image_id", @image.id) %>
+    <%= hidden_field_tag("user_id", current_user.id) %>
+    <%= submit_tag "comment", :class=>"btn btn-primary" %>
+<% end %>
+
+

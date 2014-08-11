@@ -1,0 +1,20 @@
+<h2>album index page</h2>
+<div class="container">
+  <div class = "col-md-12">
+    <% @albums.each do |album| %>
+        <div class = "col-md-2" style='height:150px;'>
+          <%= link_to album.name, album_path(album) %><br>
+          <% unless album.images.first.blank? %>
+              <%=link_to (image_tag album.images.first.avatar(:thumb)),album_path(album) %>
+          <% else %>
+              <%=link_to (image_tag 'missing.png',:style => 'width:80px; height:auto;'),album_path(album) %>
+          <% end %>
+        </div>
+    <% end %>
+  </div>
+</div>
+<%= will_paginate @albums %>
+
+<div>
+  <b><%= link_to 'ADD ALBUM',new_album_path, :class=>"btn btn-primary"%></b>
+</div>

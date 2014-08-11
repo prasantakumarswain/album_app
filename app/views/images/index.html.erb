@@ -1,0 +1,7 @@
+<h1>image index page</h1>
+<div>
+  <% @images.each do |image| %>
+      <%= image.name %><br>
+      <%= image_tag image.avatar %><br>
+  <% end %>
+</div>
